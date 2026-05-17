@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ระบบตารางเรียนการสอน</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="loginView" class="login-shell">
+    <div class="login-panel">
+      <div>
+        <p class="eyebrow">โรงเรียนทหารขนส่ง กรมการขนส่งทหารบก</p>
+        <h1>ระบบตารางเรียนการสอน</h1>
+        <p class="muted">เข้าสู่ระบบเพื่อจัดการหลักสูตร วิชา อาจารย์ และตารางเรียนประจำสัปดาห์</p>
+      </div>
+      <form id="loginForm" class="form-stack">
+        <label>ชื่อผู้ใช้ <input id="username" autocomplete="username" required value="admin"></label>
+        <label>รหัสผ่าน <input id="password" type="password" autocomplete="current-password" required value="1234"></label>
+        <button type="submit" class="primary-button">เข้าสู่ระบบ</button>
+        <p class="hint">บัญชีทดลอง: admin / 1234</p>
+      </form>
+    </div>
+  </section>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">ทส</span><div><strong>ระบบตารางเรียน</strong><small>หลักสูตรทหาร</small></div></div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="dashboard">Dashboard</button>
+        <button class="nav-item" data-view="schedule">ตารางเรียน</button>
+        <button class="nav-item" data-view="registry">ทะเบียนคุม</button>
+        <button class="nav-item" data-view="masterData">ข้อมูลพื้นฐาน</button>
+        <button class="nav-item" data-view="database">ฐานข้อมูล</button>
+      </nav>
+      <button id="logoutBtn" class="ghost-button">ออกจากระบบ</button>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div><p class="eyebrow">Academic Timetable</p><h2 id="pageTitle">Dashboard</h2></div>
+        <div class="topbar-actions"><button id="resetDemoBtn" class="secondary-button">คืนค่าข้อมูลตัวอย่าง</button><button id="exportBtn" class="secondary-button">ส่งออก JSON</button></div>
+      </header>
+
+      <section id="dashboard" class="view active-view">
+        <div class="metric-grid">
+          <article class="metric-card"><span>รายการตารางเรียน</span><strong id="metricSchedules">0</strong></article>
+          <article class="metric-card"><span>หลักสูตร</span><strong id="metricCourses">0</strong></article>
+          <article class="metric-card"><span>วิชา</span><strong id="metricSubjects">0</strong></article>
+          <article class="metric-card"><span>อาจารย์ผู้สอน</span><strong id="metricTeachers">0</strong></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel"><div class="panel-head"><h3>สรุปชั่วโมงเรียนตามวิชา</h3></div><div id="subjectProgress" class="progress-list"></div></section>
+          <section class="panel"><div class="panel-head"><h3>รายการล่าสุด</h3></div><div id="latestSchedule" class="compact-list"></div></section>
+        </div>
+      </section>
+
+      <section id="schedule" class="view">
+        <section class="panel">
+          <div class="panel-head"><h3>บันทึกตารางเรียน</h3><button id="clearScheduleForm" class="ghost-button">ล้างฟอร์ม</button></div>
+          <form id="scheduleForm" class="schedule-form">
+            <input type="hidden" id="scheduleId">
+            <label>วัน เดือน ปี <input id="scheduleDate" required placeholder="วันจันทร์ที่ ๑๑ พ.ค. ๖๙"></label>
+            <label>เวลา <select id="timeSlot" required></select></label>
+            <label>หลักสูตร <select id="courseId" required></select></label>
+            <label>วิชา <select id="subjectId" required></select></label>
+            <label>ชม.ที่ใช้หมดไป/ชม.ทั้งหมด <input id="hourUsage" placeholder="๒/๒"></label>
+            <label>ผู้สอน <select id="teacherId"></select></label>
+            <label>วิธีสอน <select id="methodId"></select></label>
+            <label>สถานที่ <select id="roomId"></select></label>
+            <label>หลักฐาน <input id="evidence" placeholder="รร.ขส.ฯ"></label>
+            <label>การแต่งกาย <select id="dressCode"></select></label>
+            <label class="span-2">หมายเหตุ <textarea id="note" rows="3"></textarea></label>
+            <div class="form-actions span-2"><button type="submit" class="primary-button">บันทึกข้อมูล</button><button type="button" id="deleteScheduleBtn" class="danger-button hidden">ลบรายการนี้</button></div>
+          </form>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>รายการตารางเรียน</h3><input id="scheduleSearch" class="search-input" placeholder="ค้นหาวัน วิชา ผู้สอน สถานที่"></div>
+          <div class="table-wrap"><table><thead><tr><th>วัน , เดือน , ปี</th><th>เวลา</th><th>วิชา</th><th>ชม.ที่ใช้หมดไป/ชม.ทั้งหมด</th><th>ผู้สอน</th><th>วิธีสอน</th><th>สถานที่</th><th>หลักฐาน</th><th>การแต่งกาย</th><th>หมายเหตุ</th><th></th></tr></thead><tbody id="scheduleTable"></tbody></table></div>
+        </section>
+      </section>
+
+      <section id="registry" class="view">
+        <div class="registry-grid">
+          <section class="panel">
+            <div class="panel-head"><h3>ทะเบียนหลักสูตรการศึกษา</h3></div>
+            <form id="courseForm" class="mini-form"><input type="hidden" id="courseEditId"><input id="courseName" required placeholder="ชื่อหลักสูตร"><input id="courseBatch" placeholder="รุ่น / เหล่า"><button class="primary-button" type="submit">บันทึก</button></form>
+            <div id="courseList" class="record-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>ทะเบียนวิชาในหลักสูตร</h3></div>
+            <form id="subjectForm" class="mini-form"><input type="hidden" id="subjectEditId"><select id="subjectCourseId" required></select><input id="subjectName" required placeholder="ชื่อวิชา"><input id="subjectHours" type="number" min="0" step="1" placeholder="ชั่วโมงเรียนทั้งหมด"><button class="primary-button" type="submit">บันทึก</button></form>
+            <div id="subjectList" class="record-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="masterData" class="view">
+        <div class="master-grid">
+          <section class="panel">
+            <div class="panel-head"><h3>บุคลากรที่เป็นอาจารย์</h3></div>
+            <form id="teacherForm" class="mini-form"><input type="hidden" id="teacherEditId"><input id="teacherName" required placeholder="ชื่อ / หน่วย"><input id="teacherRank" placeholder="ยศ / ตำแหน่ง"><button class="primary-button" type="submit">บันทึก</button></form>
+            <div id="teacherList" class="record-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>ข้อมูลพื้นฐาน</h3></div>
+            <form id="lookupForm" class="mini-form"><select id="lookupType"><option value="methods">วิธีสอน</option><option value="rooms">สถานที่</option><option value="dressCodes">การแต่งกาย</option></select><input id="lookupName" required placeholder="ชื่อรายการ"><button class="primary-button" type="submit">เพิ่ม</button></form>
+            <div id="lookupList" class="record-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="database" class="view">
+        <section class="panel readable">
+          <div class="panel-head"><h3>ฐานข้อมูลฟรีที่แนะนำ</h3></div>
+          <p>ช่วงทดลองใช้เว็บนี้เก็บข้อมูลด้วย LocalStorage ในเครื่อง เปิดไฟล์แล้วใช้งานได้ทันทีโดยไม่ต้องติดตั้งฐานข้อมูล</p>
+          <p>เมื่อต้องออนไลน์ แนะนำใช้ Supabase หรือ Neon เพราะมี PostgreSQL ฟรี และใช้ schema ในไฟล์ <strong>database.sql</strong> ได้โดยตรง</p>
+          <ol><li>สมัคร Supabase แล้วสร้าง Project ใหม่</li><li>เปิด SQL Editor แล้ววางคำสั่งจากไฟล์ database.sql</li><li>นำ URL และ anon key มาเชื่อมกับไฟล์ app.js ในส่วนที่เตรียมไว้</li><li>นำเว็บขึ้น GitHub Pages หรือ Vercel</li></ol>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
