@@ -61,6 +61,7 @@
           <form id="scheduleForm" class="schedule-form">
             <input type="hidden" id="scheduleId">
             <label>วัน เดือน ปี <input id="scheduleDate" required placeholder="วันจันทร์ที่ ๑๑ พ.ค. ๖๙"></label>
+            <label>วันที่จริง <input id="studyDate" type="date"></label>
             <label>เวลา <select id="timeSlot" required></select></label>
             <label>หลักสูตร <select id="courseId" required></select></label>
             <label>วิชา <select id="subjectId" required></select></label>
@@ -75,49 +76,15 @@
           </form>
         </section>
         <section class="panel">
+          <div class="export-bar"><label>ส่งออกเป็น<select id="exportPeriod"><option value="week">รายสัปดาห์</option><option value="month">รายเดือน</option></select></label><label>เลือกวันที่อ้างอิง<input id="exportReferenceDate" type="date"></label><label>ประเภทไฟล์<select id="exportFormat"><option value="excel">Excel</option><option value="pdf">PDF</option></select></label><button id="exportScheduleBtn" class="primary-button" type="button">Export ตารางเรียน</button></div>
           <div class="panel-head"><h3>รายการตารางเรียน</h3><input id="scheduleSearch" class="search-input" placeholder="ค้นหาวัน วิชา ผู้สอน สถานที่"></div>
           <div class="table-wrap"><table><thead><tr><th>วัน , เดือน , ปี</th><th>เวลา</th><th>วิชา</th><th>ชม.ที่ใช้หมดไป/ชม.ทั้งหมด</th><th>ผู้สอน</th><th>วิธีสอน</th><th>สถานที่</th><th>หลักฐาน</th><th>การแต่งกาย</th><th>หมายเหตุ</th><th></th></tr></thead><tbody id="scheduleTable"></tbody></table></div>
         </section>
       </section>
 
-      <section id="registry" class="view">
-        <div class="registry-grid">
-          <section class="panel">
-            <div class="panel-head"><h3>ทะเบียนหลักสูตรการศึกษา</h3></div>
-            <form id="courseForm" class="mini-form"><input type="hidden" id="courseEditId"><input id="courseName" required placeholder="ชื่อหลักสูตร"><input id="courseBatch" placeholder="รุ่น / เหล่า"><button class="primary-button" type="submit">บันทึก</button></form>
-            <div id="courseList" class="record-list"></div>
-          </section>
-          <section class="panel">
-            <div class="panel-head"><h3>ทะเบียนวิชาในหลักสูตร</h3></div>
-            <form id="subjectForm" class="mini-form"><input type="hidden" id="subjectEditId"><select id="subjectCourseId" required></select><input id="subjectName" required placeholder="ชื่อวิชา"><input id="subjectHours" type="number" min="0" step="1" placeholder="ชั่วโมงเรียนทั้งหมด"><button class="primary-button" type="submit">บันทึก</button></form>
-            <div id="subjectList" class="record-list"></div>
-          </section>
-        </div>
-      </section>
-
-      <section id="masterData" class="view">
-        <div class="master-grid">
-          <section class="panel">
-            <div class="panel-head"><h3>บุคลากรที่เป็นอาจารย์</h3></div>
-            <form id="teacherForm" class="mini-form"><input type="hidden" id="teacherEditId"><input id="teacherName" required placeholder="ชื่อ / หน่วย"><input id="teacherRank" placeholder="ยศ / ตำแหน่ง"><button class="primary-button" type="submit">บันทึก</button></form>
-            <div id="teacherList" class="record-list"></div>
-          </section>
-          <section class="panel">
-            <div class="panel-head"><h3>ข้อมูลพื้นฐาน</h3></div>
-            <form id="lookupForm" class="mini-form"><select id="lookupType"><option value="methods">วิธีสอน</option><option value="rooms">สถานที่</option><option value="dressCodes">การแต่งกาย</option></select><input id="lookupName" required placeholder="ชื่อรายการ"><button class="primary-button" type="submit">เพิ่ม</button></form>
-            <div id="lookupList" class="record-list"></div>
-          </section>
-        </div>
-      </section>
-
-      <section id="database" class="view">
-        <section class="panel readable">
-          <div class="panel-head"><h3>ฐานข้อมูลฟรีที่แนะนำ</h3></div>
-          <p>ช่วงทดลองใช้เว็บนี้เก็บข้อมูลด้วย LocalStorage ในเครื่อง เปิดไฟล์แล้วใช้งานได้ทันทีโดยไม่ต้องติดตั้งฐานข้อมูล</p>
-          <p>เมื่อต้องออนไลน์ แนะนำใช้ Supabase หรือ Neon เพราะมี PostgreSQL ฟรี และใช้ schema ในไฟล์ <strong>database.sql</strong> ได้โดยตรง</p>
-          <ol><li>สมัคร Supabase แล้วสร้าง Project ใหม่</li><li>เปิด SQL Editor แล้ววางคำสั่งจากไฟล์ database.sql</li><li>นำ URL และ anon key มาเชื่อมกับไฟล์ app.js ในส่วนที่เตรียมไว้</li><li>นำเว็บขึ้น GitHub Pages หรือ Vercel</li></ol>
-        </section>
-      </section>
+      <section id="registry" class="view"><div class="registry-grid"><section class="panel"><div class="panel-head"><h3>ทะเบียนหลักสูตรการศึกษา</h3></div><form id="courseForm" class="mini-form"><input type="hidden" id="courseEditId"><input id="courseName" required placeholder="ชื่อหลักสูตร"><input id="courseBatch" placeholder="รุ่น / เหล่า"><button class="primary-button" type="submit">บันทึก</button></form><div id="courseList" class="record-list"></div></section><section class="panel"><div class="panel-head"><h3>ทะเบียนวิชาในหลักสูตร</h3></div><form id="subjectForm" class="mini-form"><input type="hidden" id="subjectEditId"><select id="subjectCourseId" required></select><input id="subjectName" required placeholder="ชื่อวิชา"><input id="subjectHours" type="number" min="0" step="1" placeholder="ชั่วโมงเรียนทั้งหมด"><button class="primary-button" type="submit">บันทึก</button></form><div id="subjectList" class="record-list"></div></section></div></section>
+      <section id="masterData" class="view"><div class="master-grid"><section class="panel"><div class="panel-head"><h3>บุคลากรที่เป็นอาจารย์</h3></div><form id="teacherForm" class="mini-form"><input type="hidden" id="teacherEditId"><input id="teacherName" required placeholder="ชื่อ / หน่วย"><input id="teacherRank" placeholder="ยศ / ตำแหน่ง"><button class="primary-button" type="submit">บันทึก</button></form><div id="teacherList" class="record-list"></div></section><section class="panel"><div class="panel-head"><h3>ข้อมูลพื้นฐาน</h3></div><form id="lookupForm" class="mini-form"><select id="lookupType"><option value="methods">วิธีสอน</option><option value="rooms">สถานที่</option><option value="dressCodes">การแต่งกาย</option></select><input id="lookupName" required placeholder="ชื่อรายการ"><button class="primary-button" type="submit">เพิ่ม</button></form><div id="lookupList" class="record-list"></div></section></div></section>
+      <section id="database" class="view"><section class="panel readable"><div class="panel-head"><h3>ฐานข้อมูลฟรีที่แนะนำ</h3></div><p>ช่วงทดลองใช้เว็บนี้เก็บข้อมูลด้วย LocalStorage ในเครื่อง เปิดไฟล์แล้วใช้งานได้ทันทีโดยไม่ต้องติดตั้งฐานข้อมูล</p><p>เมื่อต้องออนไลน์ แนะนำใช้ Supabase หรือ Neon เพราะมี PostgreSQL ฟรี และใช้ schema ในไฟล์ <strong>database.sql</strong> ได้โดยตรง</p><ol><li>สมัคร Supabase แล้วสร้าง Project ใหม่</li><li>เปิด SQL Editor แล้ววางคำสั่งจากไฟล์ database.sql</li><li>นำ URL และ anon key มาเชื่อมกับไฟล์ app.js ในส่วนที่เตรียมไว้</li><li>นำเว็บขึ้น GitHub Pages หรือ Vercel</li></ol></section></section>
     </main>
   </div>
   <script src="app.js"></script>
